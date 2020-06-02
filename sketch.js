@@ -1,78 +1,139 @@
 var canvas;
-var form,player1;
+var form, player1;
 var gameState = 0;
-var player,player_img;
+var maingameState = 1;
+var player, player_img;
 var track;
-var carImg1,carImg2,carimg3,carImg4,carImg45;
-var car,rand;
+var carImg1, carImg2, carimg3, carImg4, carImg45;
+var car, rand;
 var carsGroup;
-var Iwall1,Iwall2;
+var Iwall1, Iwall2;
 var score = 0;
-var posY = -5000,posX = -500;
+var posY = -5000, posX = -500;
 var lev = 0;
+var canvas2, backgroundImage;
+var enemyGroup;
+var BulletGroup;
+var back, back_img;
+var playerPaddle, playerPaddle_img;
+var count = 0;
+var enemy, enemy_img;
+var pos2Y = -5000, pos2X = -500;
+var score2 = 0, rand2;
+var Iwall2_1, Iwall2_2;
+var laserSound;
+var bullet;
+//var l1i,l1iImg;
+//var play1_1;
+var play;
+
 
 function preload() {
-    intoSound = loadSound('audio/intoaudio.mp3');
-    player_img = loadImage("images/player.png");
+  intoSound = loadSound('audio/intoaudio.mp3');
+  inbo = loadImage("image/inbo.png");
+  player_img = loadImage("images/player.png");
   carImg1 = loadImage("images/car1.png");
   carImg2 = loadImage("images/car2.jpg");
   carImg3 = loadImage("images/car3.jpg");
   carImg4 = loadImage("images/car4.jpg");
   carImg5 = loadImage("images/car5.jpg");
   track = loadImage("images/track.png");
+  back_img = loadImage("image2/back.png");
+  playerPaddle_img = loadImage("image2/gun90.png");
+  enemy_img = loadImage("image2/enemy.png");
+  laserSound = loadSound('laser.ogg');
+
 
 }
 
 function setup() {
-    canvas = createCanvas(displayWidth, displayHeight);
-    form = new Form();
-    player1 = new Player();
-    player = createSprite(displayWidth/2,2300,40,40);
+  canvas = createCanvas(displayWidth, displayHeight);
+  form = new Form();
+  player1 = new Player();
+  player = createSprite(displayWidth / 2, 2300, 40, 40);
   player.addImage(player_img);
   player.scale = 2;
 
-  Iwall1 = createSprite(198,displayHeight/2,40,displayHeight*8);
-  Iwall2 = createSprite(1260,displayHeight/2,40,displayHeight*8);
+  Iwall1 = createSprite(displayWidth - 995, displayHeight / 2, 40, displayHeight * 15);
+  Iwall2 = createSprite(displayWidth - 200, displayHeight / 2, 40, displayHeight * 15);
+
 
   carsGroup = new Group();
-  if(frameCount%40===0){
-    car = createSprite(posX,posY,30,30);
+  if (frameCount % 40 === 0) {
+    car = createSprite(posX, posY, 30, 30);
   }
+
+  playerPaddle = createSprite(displayWidth / 2, 2300, 40, 40);
+  playerPaddle.addImage(playerPaddle_img);
+  playerPaddle.scale = 2;
+
+  Iwall2_1 = createSprite(displayWidth - 995, displayHeight / 2, 40, displayHeight * 15);
+  Iwall2_2 = createSprite(displayWidth - 200, displayHeight / 2, 40, displayHeight * 15);
+
+
+  enemyGroup = new Group();
+  if (frameCount % 40 === 0) {
+    enemy = createSprite(pos2X, pos2Y, 30, 30);
+  }
+
+  BulletGroup = new Group();
 
 
 }
 
 function draw() {
+  //background(inbo);
 
-    form.display();
-
-    if(lev === 1){
-        level1();
-
-    }
-
-    drawSprites();
+  form.display();
 
 
-} 
 
-function level1(){
-    background("#D8C7A9");
-  image(track, 0,-displayHeight*6,displayWidth+100, displayHeight*9);
-  camera.position.x = displayWidth/2;
-  camera.position.y = player.y-100; 
 
-  if(gameState===1){
-    fill("brown");
-    noStroke();
-    textSize(40);
-    text("You Lose!!!",displayWidth/4,player.y-300);
+
+
+
+  if (lev === 1) {
+
+
+    stage1();
+    playerPaddle.visible = false;
+
   }
+
+
+
+
+
+  if (lev === 2) {
+    player.visible = false;
+
+    gameState = 2.0;
+    level2();
+
+  }
+
+  Iwall1.visible = false;
+  Iwall2.visible = false;
+  Iwall2_1.visible = false;
+  Iwall2_2.visible = false;
+
+
+
+  drawSprites();
+
+
+}
+
+function stage1() {
+  background("#D8C7A9");
+  image(track, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
+  camera.position.x = displayWidth / 2;
+  camera.position.y = player.y - 100;
 
   fill("brown");
   noStroke();
   textSize(20);
-  text("Your Score: "+ score,50,player.y-200);
+  text("Your Score: " + score, 50, player.y - 200);
 
   Iwall1.visible = false;
   Iwall2.visible = false;
@@ -80,46 +141,34 @@ function level1(){
   player.collide(Iwall2);
   player.velocityY = -10;
 
-  if(keyDown(LEFT_ARROW)){
+
+  console.log(gameState);
+  console.log(player.y);
+
+
+  if (keyDown(LEFT_ARROW) && gameState === 0) {
     player.x -= 10;
   }
-  if(keyDown(RIGHT_ARROW)){
+  if (keyDown(RIGHT_ARROW) && gameState === 0) {
     player.x += 10;
   }
-  if(player.y === -4470){
-    gameState = 2;
-    player.velocityY = 0;
-    carsGroup.setVelocityXEach(0);
-    fill("brown");
-    noStroke();
-    textSize(40);
-    text("You Win!!!",displayWidth/4,player.y-300);
 
-  }
-  if(frameCount % 50 === 0 && gameState === 0){
+  if (frameCount % 50 === 0 && gameState === 0) {
     score += 5;
   }
 
-  if(frameCount % 50 === 0 && gameState === 0){
-    rand = random(220,1255);
-    car.y = player.y-800;
+  if (frameCount % 50 === 0 && gameState === 0) {
+    rand = random(displayWidth - 995, displayWidth - 200);
+    car.y = player.y - 800;
     car.x = rand;
     car.depth = player.depth;
     car.collide(Iwall1);
     car.collide(Iwall2);
-    num = Math.round(random(1,1));
+    num = Math.round(random(1, 1));
 
-    switch(num) {
+    switch (num) {
       case 1: car.addImage(carImg1);
-              break;
-      case 2: car.addImage(carImg2);
-              break;
-      case 3: car.addImage(carImg3);
-              break;
-      case 4: car.addImage(carImg4);
-              break;
-      case 5: car.addImage(carImg5);
-              break;
+        break;
       default: break;
     }
 
@@ -128,11 +177,160 @@ function level1(){
     carsGroup.add(car);
     car.lifetime = -100;
   }
-  if(player.isTouching(car)){
+  if (player.isTouching(car) && gameState === 0) {
     gameState = 1;
     player.destroy();
     carsGroup.destroyEach();
     score -= 5;
+  }
+
+  if (gameState === 1) {
+    fill("brown");
+    noStroke();
+    textSize(40);
+    text("You Lose!!!", displayWidth / 4, player.y - 300);
+  }
+
+  if (player.y === -4470) {
+    gameState = 2;
+    player.velocityY = 0;
+    carsGroup.setVelocityXEach(0);
+    fill("brown");
+    noStroke();
+    textSize(40);
+    text("You Win!!!", displayWidth / 4, player.y - 300);
+
+  }
+
+
+
+}
+
+function level2() {
+
+  playerPaddle.visible = true;
+  if (gameState === 2.0) {
+    background("#D8C7A9");
+    image(back_img, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
+    camera.position.x = displayWidth / 2;
+    camera.position.y = playerPaddle.y - 100;
+
+    if (keyDown(32) && frameCount % 3 === 0 && gameState === 2.0) {
+
+      laserSound.play();
+      bullet = createSprite(200, 200, 2, 8);
+      bullet.shapeColor = "red";
+      bullet.lifetime = 80;
+      bullet.x = playerPaddle.x - 7;
+      bullet.y = playerPaddle.y + 5;
+      bullet.velocityY = -30;
+      BulletGroup.push(bullet);
+
+    }
+
+    if (keyDown(LEFT_ARROW) && gameState === 2.0) {
+      playerPaddle.x -= 10;
+    }
+    if (keyDown(RIGHT_ARROW) && gameState === 2.0) {
+      playerPaddle.x += 10;
+    }
+
+    fill("brown");
+    noStroke();
+    textSize(20);
+    text("Your Score: " + score2, 50, playerPaddle.y - 200);
+
+    Iwall2_1.visible = false;
+    Iwall2_2.visible = false;
+    playerPaddle.collide(Iwall2_1);
+    playerPaddle.collide(Iwall2_2);
+    playerPaddle.velocityY = -10;
+
+
+
+
+
+
+
+
+    if (frameCount % 50 === 0 && gameState === 2.0) {
+      rand2 = random(displayWidth - 995, displayWidth - 200);
+      enemy.visible = true;
+      enemy.y = playerPaddle.y - 800;
+      enemy.x = rand2;
+      enemy.depth = playerPaddle.depth;
+      enemy.collide(Iwall2_1);
+      enemy.collide(Iwall2_2);
+      num2 = Math.round(random(1, 1));
+
+      switch (num2) {
+        case 1: enemy.addImage(enemy_img);
+          break;
+        default: break;
+      }
+
+      enemy.scale = 2;
+      enemy.velocityY = 10;
+      enemyGroup.add(enemy);
+      enemy.lifetime = -100;
+    }
+
+
+
+
+    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 350) {
+
+      enemy.visible = false;
+      score2 += 1;
+
+    }
+    if (playerPaddle.isTouching(enemy) && enemy.visible === true) {
+      gameState = 2.1;
+      playerPaddle.destroy();
+      enemyGroup.destroyEach();
+      score2 -= 5;
+      BulletGroup.destroyEach();
+      enemyGroup.destroyEach();
+      laserSound.stop();
+      bullet.velocityY = 0;
+
+    }
+  }
+
+  if (gameState === 2.1) {
+    fill("brown");
+    noStroke();
+    textSize(40);
+    text("You Lose!!!", displayWidth / 4, playerPaddle.y - 300);
+    BulletGroup.destroyEach();
+    enemyGroup.destroyEach();
+    laserSound.stop();
+    bullet.velocityY = 0;
+  }
+
+  if (playerPaddle.y === -4470) {
+    gameState = 2.1;
+    playerPaddle.velocityY = 0;
+    enemyGroup.setVelocityXEach(0);
+    BulletGroup.destroyEach();
+    enemyGroup.destroyEach();
+    laserSound.stop();
+    bullet.velocityY = 0;
+
+  }
+
+  if (score2 > 29) {
+    gameState = 2.2;
+    playerPaddle.velocityY = 0;
+    enemyGroup.setVelocityXEach(0);
+    fill("brown");
+    noStroke();
+    textSize(40);
+    text("You Win!!!", displayWidth / 4, playerPaddle.y - 300);
+    BulletGroup.destroyEach();
+    enemyGroup.destroyEach();
+    laserSound.stop();
+    bullet.velocityY = 0;
   }
 
 }
