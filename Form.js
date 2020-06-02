@@ -23,6 +23,8 @@ class Form {
         this.level1.hide();
         this.level2 = createButton('2')
         this.level2.hide();
+        this.level3 = createButton('3')
+        this.level3.hide();
         this.playb = createButton('PLAY');
         this.playb.hide();
         this.s1 = loadImage("image/S1.png");
@@ -84,9 +86,13 @@ class Form {
                                     this.level2.show();
                                     this.level2.size(100, 100);
                                     this.level2.position(150, 100);
+                                    this.level3.show();
+                                    this.level3.size(100, 100);
+                                    this.level3.position(290, 100);
                                     this.level1.mousePressed(() => {
                                         this.level1.hide();
                                         this.level2.hide();
+                                        this.level3.hide();
                                         this.levels.hide();
                                         lev = 1;
                                         
@@ -113,11 +119,23 @@ class Form {
             
                 this.level1.hide();
                 this.level2.hide();
+                this.level3.hide();
                 this.levels.hide();
 
             
         });
 
+
+        this.level3.mousePressed(() => {
+            lev = 3;
+            
+                this.level1.hide();
+                this.level2.hide();
+                this.level3.hide();
+                this.levels.hide();
+
+            
+        });
 
 
     }

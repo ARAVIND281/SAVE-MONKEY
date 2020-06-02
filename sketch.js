@@ -11,7 +11,7 @@ var Iwall1, Iwall2;
 var score = 0;
 var posY = -5000, posX = -500;
 var lev = 0;
-var canvas2, backgroundImage;
+var backgroundImage;
 var enemyGroup;
 var BulletGroup;
 var back, back_img;
@@ -23,9 +23,18 @@ var score2 = 0, rand2;
 var Iwall2_1, Iwall2_2;
 var laserSound;
 var bullet;
-//var l1i,l1iImg;
-//var play1_1;
 var play;
+var backgroundImage3;
+var bg, bg_img;
+var monkey, monkey_img;
+var count3 = 0;
+var poisonbanana, poisonbanana_img;
+var pos3Y = -5000, pos3X = -500;
+var score3 = 0, rand3;
+var Iwall3_1, Iwall3_2;
+var banana, banana_img;
+var ran3d;
+
 
 
 function preload() {
@@ -42,6 +51,10 @@ function preload() {
   playerPaddle_img = loadImage("image2/gun90.png");
   enemy_img = loadImage("image2/enemy.png");
   laserSound = loadSound('laser.ogg');
+  backgroundImage3 = loadImage("image3/back.png");
+  monkey_img = loadImage("image3/player.png");
+  poisonbanana_img = loadImage("image3/banana.png");
+  banana_img = loadImage("image3/banana1.png");
 
 
 }
@@ -79,36 +92,50 @@ function setup() {
   BulletGroup = new Group();
 
 
+  monkey = createSprite(displayWidth / 2, 2300, 40, 40);
+  monkey.addImage(monkey_img);
+  monkey.scale = 2;
+
+  Iwall3_1 = createSprite(displayWidth - 995, displayHeight / 2, 40, displayHeight * 15);
+  Iwall3_2 = createSprite(displayWidth - 200, displayHeight / 2, 40, displayHeight * 15);
+
+  poisonbananaGroup = new Group();
+  if (frameCount % 40 === 0) {
+    poisonbanana = createSprite(pos3X, pos3Y, 30, 30);
+  }
+  bananaGroup = new Group();
+  if (frameCount % 40 === 0) {
+    poisonbanana = createSprite(pos3X, pos3Y, 30, 30);
+  }
+
+
 }
 
 function draw() {
   //background(inbo);
 
   form.display();
-
-
-
-
-
-
-
   if (lev === 1) {
-
 
     stage1();
     playerPaddle.visible = false;
+    monkey.visible = false;
 
   }
-
-
-
-
-
   if (lev === 2) {
     player.visible = false;
-
+    monkey.visible = false;
     gameState = 2.0;
     level2();
+
+  }
+  
+  if (lev === 3) {
+    player.visible = false;
+    playerPaddle.visible = false;
+
+    gameState = 3.0;
+    level3();
 
   }
 
@@ -116,7 +143,8 @@ function draw() {
   Iwall2.visible = false;
   Iwall2_1.visible = false;
   Iwall2_2.visible = false;
-
+  Iwall3_1.visible = false;
+  Iwall3_2.visible = false;
 
 
   drawSprites();
@@ -246,13 +274,6 @@ function level2() {
     playerPaddle.collide(Iwall2_2);
     playerPaddle.velocityY = -10;
 
-
-
-
-
-
-
-
     if (frameCount % 50 === 0 && gameState === 2.0) {
       rand2 = random(displayWidth - 995, displayWidth - 200);
       enemy.visible = true;
@@ -331,6 +352,104 @@ function level2() {
     enemyGroup.destroyEach();
     laserSound.stop();
     bullet.velocityY = 0;
+  }
+
+}
+
+function level3(){
+
+  background("#D8C7A9");
+  image(backgroundImage3, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
+  camera.position.x = displayWidth / 2;
+  camera.position.y = monkey.y - 100;
+  fill("brown");
+  noStroke();
+  textSize(20);
+  text("Your Score: " + score3, 50, monkey.y - 200);
+  Iwall3_1.visible = false;
+  Iwall3_2.visible = false;
+  monkey.collide(Iwall3_1);
+  monkey.collide(Iwall3_2);
+  monkey.velocityY = -10;
+  
+
+  if (keyDown(LEFT_ARROW) && gameState === 3.0) {
+    monkey.x -= 10;
+  }
+  if (keyDown(RIGHT_ARROW) && gameState === 3.0) {
+    monkey.x += 10;
+  }
+
+  
+
+  rand3 = random(displayWidth - 995, displayWidth - 200);
+  if (frameCount % 50 === 0 && gameState === 3.0) {
+
+    poisonbanana.y = monkey.y - 800;
+    poisonbanana.x = rand3;
+    poisonbanana.depth = monkey.depth;
+    poisonbanana.collide(Iwall3_1);
+    poisonbanana.collide(Iwall3_2);
+    poisonbanana.addImage(poisonbanana_img);
+    poisonbanana.scale = 2;
+    poisonbanana.velocityY = 10;
+    poisonbananaGroup.add(poisonbanana);
+    poisonbanana.lifetime = -100;
+  }
+
+  if (frameCount % 55 === 0 && gameState === 3.0) {
+    //rand3 = random(displayWidth-995, displayWidth-200);
+    banana.y = monkey.y - 800;
+    banana.x = rand3;
+
+    banana.collide(Iwall3_1);
+    banana.collide(Iwall3_2);
+    banana.addImage(banana_img);
+    ana.scale = 2;
+    banana.velocityY = 10;
+    bananaGroup.add(banana);
+    banana.lifetime = -100;
+  }
+  
+
+  if (monkey.isTouching(bananaGroup)) {
+    monkey.destroy();
+    bananaGroup.destroyEach();
+    score3 += 1;
+  }
+
+  if (monkey.isTouching(poisonbananaGroup)) {
+    gameState = 3.1;
+    monkey.destroy();
+    poisonbananaGroup.destroyEach();
+    score3 -= 1;
+  }
+
+  if (monkey.y === -4470) {
+    gameState = 3.1;
+    monkey.velocityY = 0;
+    poisonbananaGroup.setVelocityXEach(0);
+
+  }
+
+  if (score3 === 10) {
+    gameState = 3.2;
+  }
+
+  if (gameState === 3.1) {
+    fill("brown");
+    noStroke();
+    textSize(40);
+    text("You Lose!!!", displayWidth / 4, monkey.y - 300);
+  }
+  if (gameState === 3.2) {
+    monkey.velocityY = 0;
+    poisonbananaGroup.setVelocityXEach(0);
+    poisonbananaGroup.setVelocityXEach(0);
+    fill("brown");
+    noStroke();
+    textSize(40);
+    text("You Win!!!", displayWidth / 4, monkey.y - 300);
   }
 
 }
