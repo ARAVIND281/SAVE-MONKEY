@@ -34,6 +34,7 @@ var score3 = 0, rand3;
 var Iwall3_1, Iwall3_2;
 var banana, banana_img;
 var ran3d;
+var check;
 
 
 
@@ -129,7 +130,7 @@ function draw() {
     level2();
 
   }
-  
+
   if (lev === 3) {
     player.visible = false;
     playerPaddle.visible = false;
@@ -168,11 +169,6 @@ function stage1() {
   player.collide(Iwall1);
   player.collide(Iwall2);
   player.velocityY = -10;
-
-
-  console.log(gameState);
-  console.log(player.y);
-
 
   if (keyDown(LEFT_ARROW) && gameState === 0) {
     player.x -= 10;
@@ -299,17 +295,19 @@ function level2() {
 
 
 
-    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 350) {
+    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 350  && enemy.visible === true ) {
 
       enemy.visible = false;
       score2 += 1;
 
     }
+
+
     if (playerPaddle.isTouching(enemy) && enemy.visible === true) {
       gameState = 2.1;
       playerPaddle.destroy();
       enemyGroup.destroyEach();
-      score2 -= 5;
+      score2 -= 1;
       BulletGroup.destroyEach();
       enemyGroup.destroyEach();
       laserSound.stop();
@@ -340,7 +338,7 @@ function level2() {
 
   }
 
-  if (score2 > 29) {
+  if (score2 > 9) {
     gameState = 2.2;
     playerPaddle.velocityY = 0;
     enemyGroup.setVelocityXEach(0);
@@ -356,7 +354,7 @@ function level2() {
 
 }
 
-function level3(){
+function level3() {
 
   background("#D8C7A9");
   image(backgroundImage3, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
@@ -371,7 +369,7 @@ function level3(){
   monkey.collide(Iwall3_1);
   monkey.collide(Iwall3_2);
   monkey.velocityY = -10;
-  
+
 
   if (keyDown(LEFT_ARROW) && gameState === 3.0) {
     monkey.x -= 10;
@@ -380,7 +378,7 @@ function level3(){
     monkey.x += 10;
   }
 
-  
+
 
   rand3 = random(displayWidth - 995, displayWidth - 200);
   if (frameCount % 50 === 0 && gameState === 3.0) {
@@ -398,7 +396,7 @@ function level3(){
   }
 
   if (frameCount % 55 === 0 && gameState === 3.0) {
-    //rand3 = random(displayWidth-995, displayWidth-200);
+    banana.visible = true;
     banana.y = monkey.y - 800;
     banana.x = rand3;
     banana.depth = monkey.depth;
@@ -410,10 +408,10 @@ function level3(){
     bananaGroup.add(banana);
     banana.lifetime = -100;
   }
-  
 
-  if (monkey.isTouching(bananaGroup)) {
-    bananaGroup.destroyEach();
+
+  if (monkey.isTouching(bananaGroup) && banana.visible === true) {
+    banana.visible = false;
     score3 += 1;
   }
 
@@ -432,7 +430,10 @@ function level3(){
 
   }
 
-  if (score3 === 10) {
+  console.log(monkey.y);
+  console.log(gameState);
+
+  if (score3 > 9) {
     gameState = 3.2;
   }
 
@@ -441,6 +442,8 @@ function level3(){
     noStroke();
     textSize(40);
     text("You Lose!!!", displayWidth / 4, monkey.y - 300);
+    bananaGroup.destroyEach();
+    poisonbananaGroup.destroyEach();
   }
   if (gameState === 3.2) {
     monkey.velocityY = 0;
@@ -450,6 +453,8 @@ function level3(){
     noStroke();
     textSize(40);
     text("You Win!!!", displayWidth / 4, monkey.y - 300);
+    bananaGroup.destroyEach();
+    poisonbananaGroup.destroyEach();
   }
 
 }
