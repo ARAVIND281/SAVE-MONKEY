@@ -39,12 +39,17 @@ class Form {
 
     display() {
            
-            this.title.position(displayWidth / 2 - 110, 0);
-            this.aboutGame.position(displayWidth / 2 - 150, displayHeight / 2 - 150);
+            this.title.position(displayWidth / 2 - 350, 0);
+            this.title.style( 'color', '#F8F800');
+            this.title.style('font-size', '80px');
+            this.aboutGame.position(displayWidth / 2 - 335, displayHeight / 2 - 150);
+            this.aboutGame.style( 'color', 'orange');
+            this.aboutGame.style('font-size', '35px');
             this.userName.position(displayWidth / 2 - 55, displayHeight / 2 - 200);
             this.playButton.size(100, 40);
             this.playButton.position(displayWidth / 2, displayHeight / 2);
             this.playButton.mousePressed(() => {
+                bg = 1;
                 this.title.hide();
                 this.userName.hide();
                 this.playButton.hide();
@@ -78,6 +83,9 @@ class Form {
                                 this.playb.mousePressed(() => {
                                     this.playb.hide();
                                     clear();
+                                    bg = 2;
+                                    this.levels.style( 'color', '#FFFFFF');
+                                    this.levels.style('font-size', '35px');
                                     this.levels.html("LEVELS");
                                     this.levels.position(displayWidth / 2 - 50, 0);
                                     this.level1.show();

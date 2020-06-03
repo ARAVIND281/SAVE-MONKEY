@@ -21,11 +21,12 @@ var enemy, enemy_img;
 var pos2Y = -5000, pos2X = -500;
 var score2 = 0, rand2;
 var Iwall2_1, Iwall2_2;
+var test1 = 0;
 var laserSound;
 var bullet;
 var play;
 var backgroundImage3;
-var bg, bg_img;
+var bg = 0, bg_img;
 var monkey, monkey_img;
 var count3 = 0;
 var poisonbanana, poisonbanana_img;
@@ -35,6 +36,8 @@ var Iwall3_1, Iwall3_2;
 var banana, banana_img;
 var ran3d;
 var check;
+var background_img;
+var lbg;
 
 
 
@@ -56,7 +59,8 @@ function preload() {
   monkey_img = loadImage("image3/player.png");
   poisonbanana_img = loadImage("image3/banana.png");
   banana_img = loadImage("image3/banana1.png");
-
+  background_img = loadImage("image/bg4.png");
+  lbg = loadImage("image/lbg.png");
 
 }
 
@@ -113,7 +117,13 @@ function setup() {
 }
 
 function draw() {
-  //background(inbo);
+  if (bg === 0){
+  background(background_img);
+  }
+
+  if(bg === 2){
+    background(lbg);
+  }
 
   form.display();
   if (lev === 1) {
@@ -239,7 +249,7 @@ function level2() {
     camera.position.x = displayWidth / 2;
     camera.position.y = playerPaddle.y - 100;
 
-    if (keyDown(32) && frameCount % 3 === 0 && gameState === 2.0) {
+    if (keyDown(32) && frameCount % 3 === 0 && gameState === 2.0 && test1 === 0) {
 
       laserSound.play();
       bullet = createSprite(200, 200, 2, 8);
@@ -295,7 +305,7 @@ function level2() {
 
 
 
-    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 350  && enemy.visible === true ) {
+    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 330  && enemy.visible === true ) {
 
       enemy.visible = false;
       score2 += 1;
@@ -304,6 +314,7 @@ function level2() {
 
 
     if (playerPaddle.isTouching(enemy) && enemy.visible === true) {
+      test1 = 1;
       gameState = 2.1;
       playerPaddle.destroy();
       enemyGroup.destroyEach();
