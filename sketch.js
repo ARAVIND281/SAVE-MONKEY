@@ -105,7 +105,7 @@ function setup() {
   }
   bananaGroup = new Group();
   if (frameCount % 40 === 0) {
-    poisonbanana = createSprite(pos3X, pos3Y, 30, 30);
+    banana = createSprite(pos3X, pos3Y, 30, 30);
   }
 
 
@@ -401,11 +401,11 @@ function level3(){
     //rand3 = random(displayWidth-995, displayWidth-200);
     banana.y = monkey.y - 800;
     banana.x = rand3;
-
+    banana.depth = monkey.depth;
     banana.collide(Iwall3_1);
     banana.collide(Iwall3_2);
     banana.addImage(banana_img);
-    ana.scale = 2;
+    banana.scale = 2;
     banana.velocityY = 10;
     bananaGroup.add(banana);
     banana.lifetime = -100;
@@ -413,7 +413,6 @@ function level3(){
   
 
   if (monkey.isTouching(bananaGroup)) {
-    monkey.destroy();
     bananaGroup.destroyEach();
     score3 += 1;
   }
@@ -421,6 +420,7 @@ function level3(){
   if (monkey.isTouching(poisonbananaGroup)) {
     gameState = 3.1;
     monkey.destroy();
+    bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
     score3 -= 1;
   }
