@@ -54,7 +54,10 @@ class Form {
             this.playButton.position(displayWidth / 2, displayHeight / 2);
             this.playButton.mousePressed(() => {
                 bg = 1;
-                soundtest = 0;
+                console.log(soundtest);
+                //soundtest = 0;
+                console.log(soundtest);
+                mainSound.play();
                 this.title.hide();
                 this.userName.hide();
                 this.playButton.hide();
@@ -88,7 +91,8 @@ class Form {
                                 this.playb.mousePressed(() => {
                                     this.playb.hide();
                                     clear();
-                                    soundtest = 1;
+                                    //soundtest = 1;
+                                    mainSound.stop();
                                     bg = 2;
                                     this.levels.style( 'color', '#FFFFFF');
                                     this.levels.style('font-size', '35px');
@@ -116,6 +120,7 @@ class Form {
                                         this.level4.hide();
                                         this.level5.hide();
                                         this.levels.hide();
+                                        mainSound.play();
                                         lev = 1;
                                         
 

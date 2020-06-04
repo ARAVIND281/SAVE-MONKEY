@@ -39,11 +39,12 @@ var check;
 var background_img;
 var lbg;
 var mainSound;
-var soundtest = 1;
+var soundtest = 2;
 var userPaddle, userPaddleimg, computerPaddle, computerPaddleimg;
 var computerScore, playerScore, gameState, ball;
 var scoreSound, wall_hitSound, hitSound;
 var bg5, ballimg;
+var test3 = 0;
 
 
 
@@ -67,8 +68,8 @@ function preload() {
   banana_img = loadImage("image3/banana1.png");
   background_img = loadImage("image/bg3.png");
   lbg = loadImage("image/lbg.png");
-  //mainSound = loadSound("audio/mainsound.mp3");
-  mainSound = loadSound("audio/intoaudio.mp3");
+  mainSound = loadSound("audio/mainsound.mp3");
+  //mainSound = loadSound("audio/intoaudio.mp3");
   scoreSound = loadSound('score.mp3');
   wall_hitSound = loadSound('wall_hit.mp3');
   hitSound = loadSound('hit.mp3');
@@ -80,6 +81,7 @@ function preload() {
 
 function setup() {
   canvas = createCanvas(displayWidth, displayHeight);
+  
   form = new Form();
   player1 = new Player();
   player = createSprite(displayWidth / 2, 2300, 40, 40);
@@ -94,6 +96,8 @@ function setup() {
   if (frameCount % 40 === 0) {
     car = createSprite(posX, posY, 30, 30);
   }
+
+  
 
   playerPaddle = createSprite(displayWidth / 2, 2300, 40, 40);
   playerPaddle.addImage(playerPaddle_img);
@@ -119,13 +123,9 @@ function setup() {
   Iwall3_2 = createSprite(displayWidth - 200, displayHeight / 2, 40, displayHeight * 15);
 
   poisonbananaGroup = new Group();
-  if (frameCount % 40 === 0) {
-    poisonbanana = createSprite(pos3X, pos3Y, 30, 30);
-  }
+  
   bananaGroup = new Group();
-  if (frameCount % 40 === 0) {
-    banana = createSprite(pos3X, pos3Y, 30, 30);
-  }
+  
 
   userPaddle = createSprite(580, 200, 10, 70);
   userPaddle.visible = false;
@@ -148,10 +148,14 @@ function draw() {
     background(lbg);
   }
 
+  
+
+  
+
 
   form.display();
   if (lev === 1) {
-    soundtest = 0;
+    //soundtest = 0;
     stage1();
     playerPaddle.visible = false;
     monkey.visible = false;
@@ -192,18 +196,14 @@ function draw() {
   Iwall3_2.visible = false;
 
 
-  /*if(soundtest === 1){
-    mainSound.stop();
-  }
-
-  if(soundtest === 0){
-    mainSound.play();
-  }*/
+  
 
   drawSprites();
 
 
 }
+
+
 
 function stage1() {
   background("#D8C7A9");
@@ -254,7 +254,8 @@ function stage1() {
     car.lifetime = -100;
   }
   if (player.isTouching(car) && gameState === 0) {
-    soundtest = 1;
+    //soundtest = 1;
+    mainSound.stop();
     gameState = 1;
     player.destroy();
     carsGroup.destroyEach();
@@ -262,7 +263,8 @@ function stage1() {
   }
 
   if (gameState === 1) {
-    soundtest = 1;
+    //soundtest = 1;
+    mainSound.stop();
     fill("brown");
     noStroke();
     textSize(40);
@@ -270,7 +272,8 @@ function stage1() {
   }
 
   if (player.y === -4470) {
-    soundtest = 1;
+    //soundtest = 1;
+    mainSound.stop();
     gameState = 2;
     player.velocityY = 0;
     carsGroup.setVelocityXEach(0);
@@ -438,7 +441,7 @@ function level3() {
 
   rand3 = random(displayWidth - 995, displayWidth - 200);
   if (frameCount % 50 === 0 && gameState === 3.0) {
-
+    poisonbanana = createSprite(pos3X, pos3Y, 30, 30);
     poisonbanana.y = monkey.y - 800;
     poisonbanana.x = rand3;
     poisonbanana.depth = monkey.depth;
@@ -448,10 +451,11 @@ function level3() {
     poisonbanana.scale = 2;
     poisonbanana.velocityY = 10;
     poisonbananaGroup.add(poisonbanana);
-    poisonbanana.lifetime = -100;
+    poisonbanana.lifetime = 150;
   }
 
   if (frameCount % 55 === 0 && gameState === 3.0) {
+    banana = createSprite(pos3X, pos3Y, 30, 30);
     banana.visible = true;
     banana.y = monkey.y - 800;
     banana.x = rand3;
@@ -462,7 +466,7 @@ function level3() {
     banana.scale = 2;
     banana.velocityY = 10;
     bananaGroup.add(banana);
-    banana.lifetime = -100;
+    banana.lifetime = 150;
   }
 
 
@@ -473,28 +477,22 @@ function level3() {
 
   if (monkey.isTouching(poisonbananaGroup)) {
     gameState = 3.1;
+    //test3 = 1;
     monkey.destroy();
+    console.log(gameState);
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
     score3 -= 1;
   }
 
-  if (monkey.y === -4470) {
+  if (monkey.y === -4470 && gameState !== 3.1) {
     gameState = 3.1;
     monkey.velocityY = 0;
     poisonbananaGroup.setVelocityXEach(0);
 
   }
-
-  console.log(monkey.y);
-  console.log(gameState);
-
-  console.log(monkey.y);
-  if (score3 > 9) {
-    gameState = 3.2;
-  }
-
-  if (gameState === 3.1) {
+  
+  if (gameState === 3.1 /*|| test3 === 1*/) {
     fill("brown");
     noStroke();
     textSize(40);
@@ -502,6 +500,16 @@ function level3() {
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
   }
+
+  //console.log(monkey.y);
+  //console.log(gameState);
+
+  if (score3 > 9) {
+    gameState = 3.2;
+  }
+
+  
+
   if (gameState === 3.2) {
     monkey.velocityY = 0;
     poisonbananaGroup.setVelocityXEach(0);
