@@ -50,6 +50,7 @@ class Form {
             this.playButton.position(displayWidth / 2, displayHeight / 2);
             this.playButton.mousePressed(() => {
                 bg = 1;
+                soundtest = 0;
                 this.title.hide();
                 this.userName.hide();
                 this.playButton.hide();
@@ -83,6 +84,7 @@ class Form {
                                 this.playb.mousePressed(() => {
                                     this.playb.hide();
                                     clear();
+                                    soundtest = 1;
                                     bg = 2;
                                     this.levels.style( 'color', '#FFFFFF');
                                     this.levels.style('font-size', '35px');

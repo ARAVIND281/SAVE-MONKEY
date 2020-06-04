@@ -38,6 +38,8 @@ var ran3d;
 var check;
 var background_img;
 var lbg;
+var mainSound;
+var soundtest = 1;
 
 
 
@@ -59,8 +61,9 @@ function preload() {
   monkey_img = loadImage("image3/player.png");
   poisonbanana_img = loadImage("image3/banana.png");
   banana_img = loadImage("image3/banana1.png");
-  background_img = loadImage("image/bg4.png");
+  background_img = loadImage("image/bg3.png");
   lbg = loadImage("image/lbg.png");
+  mainSound = loadSound("audio/mainsound.mp3");
 
 }
 
@@ -125,9 +128,10 @@ function draw() {
     background(lbg);
   }
 
+  
   form.display();
   if (lev === 1) {
-
+    soundtest = 0;
     stage1();
     playerPaddle.visible = false;
     monkey.visible = false;
@@ -157,6 +161,14 @@ function draw() {
   Iwall3_1.visible = false;
   Iwall3_2.visible = false;
 
+
+  if(soundtest === 1){
+    mainSound.stop();
+  }
+
+  if(soundtest === 0){
+    mainSound.play();
+  }
 
   drawSprites();
 
@@ -212,6 +224,7 @@ function stage1() {
     car.lifetime = -100;
   }
   if (player.isTouching(car) && gameState === 0) {
+    soundtest = 1;
     gameState = 1;
     player.destroy();
     carsGroup.destroyEach();
@@ -219,6 +232,7 @@ function stage1() {
   }
 
   if (gameState === 1) {
+    soundtest = 1;
     fill("brown");
     noStroke();
     textSize(40);
@@ -226,6 +240,7 @@ function stage1() {
   }
 
   if (player.y === -4470) {
+    soundtest = 1;
     gameState = 2;
     player.velocityY = 0;
     carsGroup.setVelocityXEach(0);
@@ -443,7 +458,8 @@ function level3() {
 
   console.log(monkey.y);
   console.log(gameState);
-
+  
+  console.log(monkey.y);
   if (score3 > 9) {
     gameState = 3.2;
   }
