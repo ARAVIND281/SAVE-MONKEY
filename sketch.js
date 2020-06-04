@@ -40,6 +40,10 @@ var background_img;
 var lbg;
 var mainSound;
 var soundtest = 1;
+var userPaddle, userPaddleimg, computerPaddle, computerPaddleimg;
+var computerScore, playerScore, gameState, ball;
+var scoreSound, wall_hitSound, hitSound;
+var bg5, ballimg;
 
 
 
@@ -63,8 +67,15 @@ function preload() {
   banana_img = loadImage("image3/banana1.png");
   background_img = loadImage("image/bg3.png");
   lbg = loadImage("image/lbg.png");
-  mainSound = loadSound("audio/mainsound.mp3");
-
+  //mainSound = loadSound("audio/mainsound.mp3");
+  mainSound = loadSound("audio/intoaudio.mp3");
+  scoreSound = loadSound('score.mp3');
+  wall_hitSound = loadSound('wall_hit.mp3');
+  hitSound = loadSound('hit.mp3');
+  userPaddleimg = loadImage("monkey-.png");
+  computerPaddleimg = loadImage("crocodile.png");
+  bg5 = loadImage("river5.png");
+  ballimg = loadImage("football.png")
 }
 
 function setup() {
@@ -116,19 +127,28 @@ function setup() {
     banana = createSprite(pos3X, pos3Y, 30, 30);
   }
 
+  userPaddle = createSprite(580, 200, 10, 70);
+  userPaddle.visible = false;
+  computerPaddle = createSprite(20, 200, 10, 70);
+  computerPaddle.visible = false;
+  ball = createSprite(300, 300, 12, 12);
+  ball.visible = false;
+  computerScore = 0;
+  playerScore = 0;
+
 
 }
 
 function draw() {
-  if (bg === 0){
-  background(background_img);
+  if (bg === 0) {
+    background(background_img);
   }
 
-  if(bg === 2){
+  if (bg === 2) {
     background(lbg);
   }
 
-  
+
   form.display();
   if (lev === 1) {
     soundtest = 0;
@@ -154,6 +174,16 @@ function draw() {
 
   }
 
+  if (lev === 5) {
+    canvas = createCanvas(600,600);
+    gameState = "serve";
+    userPaddle.visible = true;
+    computerPaddle.visible = true;
+    ball.visible = true;
+    level5();
+
+  }
+
   Iwall1.visible = false;
   Iwall2.visible = false;
   Iwall2_1.visible = false;
@@ -162,13 +192,13 @@ function draw() {
   Iwall3_2.visible = false;
 
 
-  if(soundtest === 1){
+  /*if(soundtest === 1){
     mainSound.stop();
   }
 
   if(soundtest === 0){
     mainSound.play();
-  }
+  }*/
 
   drawSprites();
 
@@ -320,7 +350,7 @@ function level2() {
 
 
 
-    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 330  && enemy.visible === true ) {
+    if (BulletGroup.isTouching(enemy) && enemy.y > playerPaddle.y - 330 && enemy.visible === true) {
 
       enemy.visible = false;
       score2 += 1;
@@ -458,7 +488,7 @@ function level3() {
 
   console.log(monkey.y);
   console.log(gameState);
-  
+
   console.log(monkey.y);
   if (score3 > 9) {
     gameState = 3.2;
@@ -484,4 +514,103 @@ function level3() {
     poisonbananaGroup.destroyEach();
   }
 
+}
+
+function level5() {
+  fill(255);
+
+  background(bg5);
+  edges = createEdgeSprites();
+  text(computerScore, 270, 20);
+  text(playerScore, 330, 20);
+  userPaddle.addImage(userPaddleimg);
+  userPaddle.scale = 0.2;
+  computerPaddle.addImage(computerPaddleimg);
+  computerPaddle.scale = 0.2;
+  ball.addImage(ballimg);
+  ball.scale = 0.2;
+
+
+
+  for (var i = 0; i < 600; i += 20) {
+    line(300, i, 300, i + 10);
+  }
+
+
+
+  if (gameState === "serve") {
+    fill(255);
+    text("Press Space to Serve", 250, 280);
+  }
+
+  if (gameState === "over") {
+    fill(255);
+    text("Game Over!", 270, 260);
+    //text("Press 'R' to Restart",250,280);
+  }
+
+  /*if (keyDown("r")) {
+    gameState = "serve";
+    computerScore = 0;
+    playerScore = 0;
+  }*/
+
+
+
+  if (keyDown("space") && gameState == "serve") {
+    ball.velocityX = 5;
+    ball.velocityY = 5;
+    gameState = "play";
+  }
+
+
+  userPaddle.y = World.mouseY;
+
+
+
+
+  if (ball.isTouching(userPaddle)) {
+    hitSound.play();
+    ball.x = ball.x - 5;
+    ball.velocityX = -ball.velocityX;
+  }
+
+
+  if (ball.isTouching(computerPaddle)) {
+    hitSound.play();
+    ball.x = ball.x + 5;
+    ball.velocityX = -ball.velocityX;
+  }
+
+
+  if (ball.x > 600 || ball.x < 0) {
+    scoreSound.play();
+
+    if (ball.x < 0) {
+      playerScore++;
+    }
+    else {
+      computerScore++;
+    }
+
+    ball.x = 300;
+    ball.y = 300;
+    ball.velocityX = 0;
+    ball.velocityY = 0;
+    gameState = "serve";
+
+    if (computerScore === 5 || playerScore === 5) {
+      gameState = "over";
+    }
+  }
+
+
+  if (ball.isTouching(edges[2]) || ball.isTouching(edges[3])) {
+    ball.bounceOff(edges[2]);
+    ball.bounceOff(edges[3]);
+    wall_hitSound.play();
+  }
+
+
+  computerPaddle.y = ball.y;
 }

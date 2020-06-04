@@ -25,6 +25,10 @@ class Form {
         this.level2.hide();
         this.level3 = createButton('3')
         this.level3.hide();
+        this.level4 = createButton('4')
+        this.level4.hide();
+        this.level5 = createButton('5')
+        this.level5.hide();
         this.playb = createButton('PLAY');
         this.playb.hide();
         this.s1 = loadImage("image/S1.png");
@@ -99,10 +103,18 @@ class Form {
                                     this.level3.show();
                                     this.level3.size(100, 100);
                                     this.level3.position(290, 100);
+                                    this.level4.show();
+                                    this.level4.size(100, 100);
+                                    this.level4.position(430, 100);
+                                    this.level5.show();
+                                    this.level5.size(100, 100);
+                                    this.level5.position(570, 100);
                                     this.level1.mousePressed(() => {
                                         this.level1.hide();
                                         this.level2.hide();
                                         this.level3.hide();
+                                        this.level4.hide();
+                                        this.level5.hide();
                                         this.levels.hide();
                                         lev = 1;
                                         
@@ -130,6 +142,8 @@ class Form {
                 this.level1.hide();
                 this.level2.hide();
                 this.level3.hide();
+                this.level4.hide();
+                this.level5.hide();
                 this.levels.hide();
 
             
@@ -142,6 +156,34 @@ class Form {
                 this.level1.hide();
                 this.level2.hide();
                 this.level3.hide();
+                this.level4.hide();
+                this.level5.hide();
+                this.levels.hide();
+
+            
+        });
+
+        this.level4.mousePressed(() => {
+            lev = 4;
+            
+                this.level1.hide();
+                this.level2.hide();
+                this.level3.hide();
+                this.level4.hide();
+                this.level5.hide();
+                this.levels.hide();
+
+            
+        });
+
+        this.level5.mousePressed(() => {
+            lev = 5;
+            
+                this.level1.hide();
+                this.level2.hide();
+                this.level3.hide();
+                this.level4.hide();
+                this.level5.hide();
                 this.levels.hide();
 
             
