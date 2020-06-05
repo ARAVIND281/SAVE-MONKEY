@@ -1,4 +1,4 @@
-var canvas;
+var canvas, canvas1;
 var form, player1;
 var gameState = 0;
 var maingameState = 1;
@@ -45,24 +45,22 @@ var computerScore, playerScore, ball;
 var scoreSound, wall_hitSound, hitSound;
 var bg5, ballimg;
 var test3 = 0;
-var mainMenu;mainMenuTest = 0;
-mainMenu = createButton('MAIN MENU');
-mainMenu.hide();
+var mainMenu; mainMenuTest = 0;
+var testl1 = 0;
+var ok = 0, ok2 = 0, ok3 = 0, ok4 = 0;
+var gameState1 = 0;
+
 
 
 
 function preload() {
-  intoSound = loadSound('audio/intoaudio.mp3');
   inbo = loadImage("image/inbo.png");
   player_img = loadImage("images/player.png");
   carImg1 = loadImage("images/car1.png");
-  carImg2 = loadImage("images/car2.jpg");
-  carImg3 = loadImage("images/car3.jpg");
-  carImg4 = loadImage("images/car4.jpg");
-  carImg5 = loadImage("images/car5.jpg");
+
   track = loadImage("images/track.png");
   back_img = loadImage("image2/back.png");
-  playerPaddle_img = loadImage("image2/gun90.png");
+  playerPaddle_img = loadImage("image2/gun2.png");
   enemy_img = loadImage("image2/enemy.png");
   laserSound = loadSound('laser.ogg');
   backgroundImage3 = loadImage("image3/back.png");
@@ -72,7 +70,6 @@ function preload() {
   background_img = loadImage("image/bg3.png");
   lbg = loadImage("image/lbg.png");
   mainSound = loadSound("audio/mainsound.mp3");
-  //mainSound = loadSound("audio/intoaudio.mp3");
   scoreSound = loadSound('score.mp3');
   wall_hitSound = loadSound('wall_hit.mp3');
   hitSound = loadSound('hit.mp3');
@@ -84,7 +81,9 @@ function preload() {
 
 function setup() {
   canvas = createCanvas(displayWidth, displayHeight);
-  
+  mainMenu = createButton('MAIN MENU');
+  mainMenu.hide();
+
   form = new Form();
   player1 = new Player();
   player = createSprite(displayWidth / 2, 2300, 40, 40);
@@ -100,7 +99,7 @@ function setup() {
     car = createSprite(posX, posY, 30, 30);
   }
 
-  
+
 
   playerPaddle = createSprite(displayWidth / 2, 2300, 40, 40);
   playerPaddle.addImage(playerPaddle_img);
@@ -126,15 +125,15 @@ function setup() {
   Iwall3_2 = createSprite(displayWidth - 200, displayHeight / 2, 40, displayHeight * 15);
 
   poisonbananaGroup = new Group();
-  
-  bananaGroup = new Group();
-  
 
-  userPaddle = createSprite(580, 200, 10, 70);
+  bananaGroup = new Group();
+
+
+  userPaddle = createSprite(displayWidth-20, 200, 10, 70);
   userPaddle.visible = false;
   computerPaddle = createSprite(20, 200, 10, 70);
   computerPaddle.visible = false;
-  ball = createSprite(300, 300, 12, 12);
+  ball = createSprite(displayWidth/2, displayHeight/2, 12, 12);
   ball.visible = false;
   computerScore = 0;
   playerScore = 0;
@@ -151,17 +150,24 @@ function draw() {
     background(lbg);
   }
 
-  
 
-  
+
+
+
+
 
 
   form.display();
   if (lev === 1) {
     //soundtest = 0;
+    testl1 = 0.1;
+    gameState1 = 0.1;
     stage1();
     playerPaddle.visible = false;
     monkey.visible = false;
+    mainMenuTest = 1;
+    mainMenu.hide();
+    //ok = 0;
 
   }
   if (lev === 2) {
@@ -169,6 +175,7 @@ function draw() {
     monkey.visible = false;
     gameState = 2.0;
     level2();
+    mainMenu.hide();
 
   }
 
@@ -178,16 +185,17 @@ function draw() {
 
     gameState = 3.0;
     level3();
+    mainMenu.hide();
 
   }
 
-  if (lev === 5) {
-    canvas = createCanvas(600,600);
+  if (lev === 4) {
     gameState = "serve";
     userPaddle.visible = true;
     computerPaddle.visible = true;
     ball.visible = true;
-    level5();
+    level4();
+    mainMenu.hide();
 
   }
 
@@ -198,25 +206,41 @@ function draw() {
   Iwall3_1.visible = false;
   Iwall3_2.visible = false;
 
-  if(mainMenuTest === 1){
-    
-    mainMenu.show();
+
+  if (ok === 1 || ok2 === 1 || ok3 === 1 || ok4 === 1) {
+    mainMenu.size(100, 40);
     mainMenu.position(displayWidth / 2, displayHeight / 2);
+    mainMenu.show();
   }
 
   mainMenu.mousePressed(() => {
-    mainMenuTest = 0;
-    clear();
+    ok = 2;
+    ok4 = 2;
   });
-  
-  if(mainMenuTest === 0){
+
+  if (ok === 2 || ok4 === 2) {
     mainMenu.hide();
+    ok2 = 0;
+    ok3 = 0;
+    ok4 = 0;
+    gameState1 = 0;
     gameState = 0;
-    
+    score = 0;
+    testl1 = 0;
+    count = 0;
+    score2 = 0;
+    test1 = 0;
+    count3 = 0;
+    score3 = 0;
+    test3 = 0;
+    clear();
+    lev = 0;
+    ok = 3;
+    computerScore = 0;
+    playerScore = 0;
   }
 
 
-  
 
   drawSprites();
 
@@ -234,7 +258,7 @@ function stage1() {
   fill("brown");
   noStroke();
   textSize(20);
-  text("Your Score: " + score, 50, player.y - 200);
+  //text("Your Score: " + score, 50, player.y - 200);
 
   Iwall1.visible = false;
   Iwall2.visible = false;
@@ -242,18 +266,18 @@ function stage1() {
   player.collide(Iwall2);
   player.velocityY = -10;
 
-  if (keyDown(LEFT_ARROW) && gameState === 0) {
+  if (keyDown(LEFT_ARROW) && testl1 === 0.1) {
     player.x -= 10;
   }
-  if (keyDown(RIGHT_ARROW) && gameState === 0) {
+  if (keyDown(RIGHT_ARROW) && testl1 === 0.1) {
     player.x += 10;
   }
 
-  if (frameCount % 50 === 0 && gameState === 0) {
+  if (frameCount % 50 === 0 && testl1 === 0.1 && gameState1 === 0.1) {
     score += 5;
   }
 
-  if (frameCount % 50 === 0 && gameState === 0) {
+  if (frameCount % 50 === 0 && testl1 === 0.1) {
     rand = random(displayWidth - 995, displayWidth - 200);
     car.y = player.y - 800;
     car.x = rand;
@@ -271,39 +295,55 @@ function stage1() {
     car.scale = 2;
     car.velocityY = 10;
     carsGroup.add(car);
-    car.lifetime = -100;
+    car.lifetime = 150;
   }
-  if (player.isTouching(car) && gameState === 0) {
-    //soundtest = 1;
+  if (player.isTouching(car) /*&& testl1 === 0.1*/) {
+    testl1 = 1;
     mainSound.stop();
-    gameState = 1;
-    mainMenuTest = 1;
+    testl1 = 1;
+
+    mainMenuTest = 2;
     player.destroy();
+    //player.visible=false;
+    player.velocityY = 0;
     carsGroup.destroyEach();
+    //carsGroup.visible = false ;
     score -= 5;
+    testl1 = 1;
+    console.log("hi");
+    mainMenu.show();
+    ok = 1;
   }
 
-  if (gameState === 1) {
-    //soundtest = 1;
+  if (testl1 === 1) {
+
     mainSound.stop();
     fill("brown");
     noStroke();
     textSize(40);
     text("You Lose!!!", displayWidth / 4, player.y - 300);
-    mainMenuTest = 1;
+    mainMenuTest = 2;
+    //testl1 = 1;
+    mainMenu.show();
+    ok = 1;
   }
 
   if (player.y === -4470) {
-    //soundtest = 1;
+
     mainSound.stop();
-    gameState = 2;
+    gameState1 = 2;
     player.velocityY = 0;
     carsGroup.setVelocityXEach(0);
     fill("brown");
     noStroke();
     textSize(40);
     text("You Win!!!", displayWidth / 4, player.y - 300);
-    mainMenuTest = 1;
+    mainMenuTest = 2;
+    carsGroup.destroyEach();
+    //carsGroup.visible = false ;
+    //testl1 = 1;
+    mainMenu.show();
+    ok = 1;
 
   }
 
@@ -325,7 +365,7 @@ function level2() {
       laserSound.play();
       bullet = createSprite(200, 200, 2, 8);
       bullet.shapeColor = "red";
-      bullet.lifetime = 80;
+      bullet.lifetime = 100;
       bullet.x = playerPaddle.x - 7;
       bullet.y = playerPaddle.y + 5;
       bullet.velocityY = -30;
@@ -370,7 +410,7 @@ function level2() {
       enemy.scale = 2;
       enemy.velocityY = 10;
       enemyGroup.add(enemy);
-      enemy.lifetime = -100;
+      enemy.lifetime = 150;
     }
 
 
@@ -381,10 +421,12 @@ function level2() {
       enemy.visible = false;
       score2 += 1;
 
+
     }
 
 
     if (playerPaddle.isTouching(enemy) && enemy.visible === true) {
+
       test1 = 1;
       gameState = 2.1;
       playerPaddle.destroy();
@@ -393,8 +435,9 @@ function level2() {
       BulletGroup.destroyEach();
       enemyGroup.destroyEach();
       laserSound.stop();
-      bullet.velocityY = 0;
+      //bullet.velocityY = 0;
       mainSound.stop();
+      ok2 = 1;
 
     }
   }
@@ -407,8 +450,9 @@ function level2() {
     BulletGroup.destroyEach();
     enemyGroup.destroyEach();
     laserSound.stop();
-    bullet.velocityY = 0;
+    //bullet.velocityY = 0;
     mainSound.stop();
+    ok2 = 1;
   }
 
   if (playerPaddle.y === -4470) {
@@ -420,6 +464,7 @@ function level2() {
     laserSound.stop();
     bullet.velocityY = 0;
     mainSound.stop();
+    ok2 = 1;
 
   }
 
@@ -436,6 +481,7 @@ function level2() {
     laserSound.stop();
     bullet.velocityY = 0;
     mainSound.stop();
+    ok2 = 1;
   }
 
 }
@@ -443,6 +489,7 @@ function level2() {
 function level3() {
 
   background("#D8C7A9");
+  monkey.visible = true;
   image(backgroundImage3, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
   camera.position.x = displayWidth / 2;
   camera.position.y = monkey.y - 100;
@@ -506,11 +553,11 @@ function level3() {
     gameState = 3.1;
     test3 = 1;
     monkey.destroy();
-    console.log(gameState);
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
     score3 -= 1;
     mainSound.stop();
+    ok3 = 1;
   }
 
   if (monkey.y === -4470 && gameState !== 3.1) {
@@ -518,9 +565,10 @@ function level3() {
     monkey.velocityY = 0;
     poisonbananaGroup.setVelocityXEach(0);
     mainSound.stop();
+    ok3 = 1;
 
   }
-  
+
   if (gameState === 3.1 || test3 === 1) {
     fill("brown");
     noStroke();
@@ -537,9 +585,10 @@ function level3() {
   if (score3 > 9) {
     gameState = 3.2;
     mainSound.stop();
+    ok3 = 1;
   }
 
-  
+
 
   if (gameState === 3.2) {
     monkey.velocityY = 0;
@@ -552,55 +601,51 @@ function level3() {
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
     mainSound.stop();
+    ok3 = 1;
   }
 
 }
 
-function level5() {
+function level4() {
   fill(255);
-
+  
   background(bg5);
   edges = createEdgeSprites();
-  text(computerScore, 270, 20);
-  text(playerScore, 330, 20);
+  edges.visible=false;
+  text(computerScore, displayWidth / 2 - 30, 20);
+  text(playerScore, displayWidth / 2 + 30, 20);
   userPaddle.addImage(userPaddleimg);
   userPaddle.scale = 0.2;
   computerPaddle.addImage(computerPaddleimg);
   computerPaddle.scale = 0.2;
   ball.addImage(ballimg);
   ball.scale = 0.2;
+  camera.y=384;
 
 
 
-  for (var i = 0; i < 600; i += 20) {
-    line(300, i, 300, i + 10);
+  for (var i = 0; i < displayHeight; i += 20) {
+    line(displayWidth / 2, i, displayWidth / 2, i + 10);
   }
 
 
 
   if (gameState === "serve") {
     fill(255);
-    text("Press Space to Serve", 250, 280);
+    text("Press Space to Serve", displayWidth / 2 - 50, displayHeight / 2 - 20);
   }
 
   if (gameState === "over") {
     fill(255);
-    text("Game Over!", 270, 260);
-    mainSound.stop();
-    //text("Press 'R' to Restart",250,280);
+    text("Game Over!", displayWidth / 2 - 30, displayHeight / 2 - 40);
   }
 
-  /*if (keyDown("r")) {
-    gameState = "serve";
-    computerScore = 0;
-    playerScore = 0;
-  }*/
 
 
 
-  if (keyDown("space") && gameState == "serve") {
-    ball.velocityX = 5;
-    ball.velocityY = 5;
+  if (keyDown("space") && gameState == "serve" && ball.x === displayWidth/2 && ball.y === displayHeight/2) {
+    ball.velocityX = 8;
+    ball.velocityY = 8;
     gameState = "play";
   }
 
@@ -624,7 +669,7 @@ function level5() {
   }
 
 
-  if (ball.x > 600 || ball.x < 0) {
+  if (ball.x > displayWidth || ball.x < 0) {
     scoreSound.play();
 
     if (ball.x < 0) {
@@ -634,14 +679,20 @@ function level5() {
       computerScore++;
     }
 
-    ball.x = 300;
-    ball.y = 300;
+    ball.x = displayWidth / 2;
+    ball.y = displayHeight / 2;
     ball.velocityX = 0;
     ball.velocityY = 0;
     gameState = "serve";
 
     if (computerScore === 5 || playerScore === 5) {
       gameState = "over";
+      ok4 = 1;
+      ball.destroy();
+      computerPaddle.destroy();
+      userPaddle.destroy();
+      mainSound.stop();
+      clear();
     }
   }
 
