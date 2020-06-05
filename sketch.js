@@ -41,10 +41,13 @@ var lbg;
 var mainSound;
 var soundtest = 2;
 var userPaddle, userPaddleimg, computerPaddle, computerPaddleimg;
-var computerScore, playerScore, gameState, ball;
+var computerScore, playerScore, ball;
 var scoreSound, wall_hitSound, hitSound;
 var bg5, ballimg;
 var test3 = 0;
+var mainMenu;mainMenuTest = 0;
+mainMenu = createButton('MAIN MENU');
+mainMenu.hide();
 
 
 
@@ -195,6 +198,23 @@ function draw() {
   Iwall3_1.visible = false;
   Iwall3_2.visible = false;
 
+  if(mainMenuTest === 1){
+    
+    mainMenu.show();
+    mainMenu.position(displayWidth / 2, displayHeight / 2);
+  }
+
+  mainMenu.mousePressed(() => {
+    mainMenuTest = 0;
+    clear();
+  });
+  
+  if(mainMenuTest === 0){
+    mainMenu.hide();
+    gameState = 0;
+    
+  }
+
 
   
 
@@ -257,6 +277,7 @@ function stage1() {
     //soundtest = 1;
     mainSound.stop();
     gameState = 1;
+    mainMenuTest = 1;
     player.destroy();
     carsGroup.destroyEach();
     score -= 5;
@@ -269,6 +290,7 @@ function stage1() {
     noStroke();
     textSize(40);
     text("You Lose!!!", displayWidth / 4, player.y - 300);
+    mainMenuTest = 1;
   }
 
   if (player.y === -4470) {
@@ -281,6 +303,7 @@ function stage1() {
     noStroke();
     textSize(40);
     text("You Win!!!", displayWidth / 4, player.y - 300);
+    mainMenuTest = 1;
 
   }
 
@@ -371,6 +394,7 @@ function level2() {
       enemyGroup.destroyEach();
       laserSound.stop();
       bullet.velocityY = 0;
+      mainSound.stop();
 
     }
   }
@@ -384,6 +408,7 @@ function level2() {
     enemyGroup.destroyEach();
     laserSound.stop();
     bullet.velocityY = 0;
+    mainSound.stop();
   }
 
   if (playerPaddle.y === -4470) {
@@ -394,6 +419,7 @@ function level2() {
     enemyGroup.destroyEach();
     laserSound.stop();
     bullet.velocityY = 0;
+    mainSound.stop();
 
   }
 
@@ -409,6 +435,7 @@ function level2() {
     enemyGroup.destroyEach();
     laserSound.stop();
     bullet.velocityY = 0;
+    mainSound.stop();
   }
 
 }
@@ -477,28 +504,31 @@ function level3() {
 
   if (monkey.isTouching(poisonbananaGroup)) {
     gameState = 3.1;
-    //test3 = 1;
+    test3 = 1;
     monkey.destroy();
     console.log(gameState);
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
     score3 -= 1;
+    mainSound.stop();
   }
 
   if (monkey.y === -4470 && gameState !== 3.1) {
     gameState = 3.1;
     monkey.velocityY = 0;
     poisonbananaGroup.setVelocityXEach(0);
+    mainSound.stop();
 
   }
   
-  if (gameState === 3.1 /*|| test3 === 1*/) {
+  if (gameState === 3.1 || test3 === 1) {
     fill("brown");
     noStroke();
     textSize(40);
     text("You Lose!!!", displayWidth / 4, monkey.y - 300);
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
+    mainSound.stop();
   }
 
   //console.log(monkey.y);
@@ -506,6 +536,7 @@ function level3() {
 
   if (score3 > 9) {
     gameState = 3.2;
+    mainSound.stop();
   }
 
   
@@ -520,6 +551,7 @@ function level3() {
     text("You Win!!!", displayWidth / 4, monkey.y - 300);
     bananaGroup.destroyEach();
     poisonbananaGroup.destroyEach();
+    mainSound.stop();
   }
 
 }
@@ -554,6 +586,7 @@ function level5() {
   if (gameState === "over") {
     fill(255);
     text("Game Over!", 270, 260);
+    mainSound.stop();
     //text("Press 'R' to Restart",250,280);
   }
 

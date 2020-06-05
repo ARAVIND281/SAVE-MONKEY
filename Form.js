@@ -150,6 +150,7 @@ class Form {
                 this.level4.hide();
                 this.level5.hide();
                 this.levels.hide();
+                mainSound.play();
 
             
         });
@@ -164,6 +165,7 @@ class Form {
                 this.level4.hide();
                 this.level5.hide();
                 this.levels.hide();
+                mainSound.play();
 
             
         });
@@ -190,9 +192,12 @@ class Form {
                 this.level4.hide();
                 this.level5.hide();
                 this.levels.hide();
+                mainSound.play();
 
             
         });
+
+        
 
 
     }
