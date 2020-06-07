@@ -1,5 +1,5 @@
 var canvas, canvas1;
-var form, player1;
+var form, player1, player;
 var gameState = 0;
 var maingameState = 1;
 var player, player_img;
@@ -129,14 +129,16 @@ function setup() {
   bananaGroup = new Group();
 
 
-  userPaddle = createSprite(displayWidth-20, 200, 10, 70);
+  userPaddle = createSprite(displayWidth - 20, 200, 10, 70);
   userPaddle.visible = false;
   computerPaddle = createSprite(20, 200, 10, 70);
   computerPaddle.visible = false;
-  ball = createSprite(displayWidth/2, displayHeight/2, 12, 12);
+  ball = createSprite(displayWidth / 2, displayHeight / 2, 12, 12);
   ball.visible = false;
   computerScore = 0;
   playerScore = 0;
+  edges = createEdgeSprites();
+  edges.visible = false;
 
 
 }
@@ -238,6 +240,29 @@ function draw() {
     ok = 3;
     computerScore = 0;
     playerScore = 0;
+    playerPaddle = createSprite(displayWidth / 2, 2300, 40, 40);
+    playerPaddle.addImage(playerPaddle_img);
+    playerPaddle.scale = 2;
+    player = createSprite(displayWidth / 2, 2300, 40, 40);
+    player.addImage(player_img);
+    player.scale = 2;
+    if (frameCount % 40 === 0) {
+      //car = createSprite(posX, posY, 30, 30);
+    }
+    if (frameCount % 40 === 0) {
+      //enemy = createSprite(pos2X, pos2Y, 30, 30);
+    }
+    monkey = createSprite(displayWidth / 2, 2300, 40, 40);
+    monkey.addImage(monkey_img);
+    monkey.scale = 2;
+    userPaddle = createSprite(displayWidth - 20, 200, 10, 70);
+    userPaddle.visible = false;
+    computerPaddle = createSprite(20, 200, 10, 70);
+    computerPaddle.visible = false;
+    ball = createSprite(displayWidth / 2, displayHeight / 2, 12, 12);
+    ball.visible = false;
+    monkey.visible = false;
+    edges.visible = false;
   }
 
 
@@ -250,6 +275,8 @@ function draw() {
 
 
 function stage1() {
+  player.visible = true;
+  edges.visible = false;
   background("#D8C7A9");
   image(track, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
   camera.position.x = displayWidth / 2;
@@ -278,6 +305,7 @@ function stage1() {
   }
 
   if (frameCount % 50 === 0 && testl1 === 0.1) {
+    car = createSprite(posX, posY, 30, 30);
     rand = random(displayWidth - 995, displayWidth - 200);
     car.y = player.y - 800;
     car.x = rand;
@@ -354,6 +382,7 @@ function stage1() {
 function level2() {
 
   playerPaddle.visible = true;
+  edges.visible = false;
   if (gameState === 2.0) {
     background("#D8C7A9");
     image(back_img, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
@@ -392,6 +421,7 @@ function level2() {
     playerPaddle.velocityY = -10;
 
     if (frameCount % 50 === 0 && gameState === 2.0) {
+      enemy = createSprite(pos2X, pos2Y, 30, 30);
       rand2 = random(displayWidth - 995, displayWidth - 200);
       enemy.visible = true;
       enemy.y = playerPaddle.y - 800;
@@ -482,6 +512,7 @@ function level2() {
     bullet.velocityY = 0;
     mainSound.stop();
     ok2 = 1;
+    edges.visible = false;
   }
 
 }
@@ -490,6 +521,7 @@ function level3() {
 
   background("#D8C7A9");
   monkey.visible = true;
+  edges.visible = false;
   image(backgroundImage3, 0, -displayHeight * 6, displayWidth + 100, displayHeight * 9);
   camera.position.x = displayWidth / 2;
   camera.position.y = monkey.y - 100;
@@ -608,10 +640,9 @@ function level3() {
 
 function level4() {
   fill(255);
-  
+
   background(bg5);
-  edges = createEdgeSprites();
-  edges.visible=false;
+  edges.visible = false;
   text(computerScore, displayWidth / 2 - 30, 20);
   text(playerScore, displayWidth / 2 + 30, 20);
   userPaddle.addImage(userPaddleimg);
@@ -620,7 +651,7 @@ function level4() {
   computerPaddle.scale = 0.2;
   ball.addImage(ballimg);
   ball.scale = 0.2;
-  camera.y=384;
+  camera.y = 384;
 
 
 
@@ -643,7 +674,7 @@ function level4() {
 
 
 
-  if (keyDown("space") && gameState == "serve" && ball.x === displayWidth/2 && ball.y === displayHeight/2) {
+  if (keyDown("space") && gameState == "serve" && ball.x === displayWidth / 2 && ball.y === displayHeight / 2) {
     ball.velocityX = 8;
     ball.velocityY = 8;
     gameState = "play";

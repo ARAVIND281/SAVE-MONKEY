@@ -122,10 +122,10 @@ class Form {
                                 this.levels_4.html("LEVEL 4 : CROCODILE : '' PLAY AND WIN 50 MATCHES WITH ME THEN I WILL LET YOU GO '' .HELP MONKEY BY PLAYING WITH KING OF CROCODILES .");
                                 this.levels_4.position(10, displayHeight / 2 + 150);
                                 this.greeting.style('color', '#FFFFFF');
-                                this.greeting.html("I HOPE " + player1 + " ENJOYED THE GAME !!!");
+                                this.greeting.html("I HOPE " + player1.name + " ENJOYED THE GAME !!!");
                                 this.greeting.position(displayWidth / 2 - 200, displayHeight - 150);
                                 this.repote.style('color', '#FFFFFF');
-                                this.repote.html(player1 + " IF ANY PROBLEM PLEASE REPORT TO inbogamestudio@gmail.com");
+                                this.repote.html(player1.name + " IF ANY PROBLEM PLEASE REPORT TO inbogamestudio@gmail.com");
                                 this.repote.position(displayWidth / 2 - 300, displayHeight -100);
                                 console.log(player1);
                                 this.level1.show();
