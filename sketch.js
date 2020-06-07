@@ -262,6 +262,7 @@ function draw() {
     ball = createSprite(displayWidth / 2, displayHeight / 2, 12, 12);
     ball.visible = false;
     monkey.visible = false;
+    player.visible = false;
     edges.visible = false;
   }
 
